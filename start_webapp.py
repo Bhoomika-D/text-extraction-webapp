@@ -22,7 +22,7 @@ def check_dependencies():
             elif module == 'numpy':
                 import numpy
             elif module == 'easyocr':
-                import easyocr
+                import easyocr    
         except ImportError:
             missing.append(module)
     
@@ -67,10 +67,7 @@ def main():
     print("=" * 70)
     
     # Check dependencies
-    print("\n🔍 Checking dependencies...")
-    if not check_dependencies():
-        sys.exit(1)
-    print("✓ All dependencies installed")
+   
     
     # Check files
     print("\n🔍 Checking files...")
@@ -106,7 +103,9 @@ def main():
     # Import and run app
     try:
         from app import app
-        app.run(debug=True, host='0.0.0.0', port=5000, use_reloader=False)
+        port = int(os.environ.get("PORT", 5000))
+        app.run(debug=False, host="0.0.0.0", port=port)
+    
     except KeyboardInterrupt:
         print("\n\n👋 Server stopped by user")
     except Exception as e:
