@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Extraction from Complex Backgrounds</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 Text Extraction System</h1>
+            <p class="subtitle">Extract English and Persian text from complex backgrounds</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Upload Section -->
+            <div class="card">
+                <h2>📤 Upload Image</h2>
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                    <div class="upload-placeholder">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <p>Click to upload or drag and drop</p>
+                        <p class="file-info">Supports: JPG, PNG, BMP</p>
+                    </div>
+                    <img id="uploadedImage" class="uploaded-image" style="display: none;">
+                </div>
+                <button id="uploadBtn" class="btn btn-primary" onclick="document.getElementById('imageInput').click()">
+                    Choose Image
+                </button>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="card" id="filterSection" style="display: none;">
+                <h2>🎨 Processing Options</h2>
+                
+                <!-- Image Type Selection -->
+                <div class="image-type-selection">
+                    <label class="section-label">Image Type:</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="imageType" value="simple" id="simpleType" checked>
+                            <span class="radio-custom"></span>
+                            <span class="radio-text">
+                                <strong>Simple Image</strong>
+                                <small>Clean background, clear text (Tesseract OCR)</small>
+                            </span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="imageType" value="complex" id="complexType">
+                            <span class="radio-custom"></span>
+                            <span class="radio-text">
+                                <strong>Complex Image</strong>
+                                <small>Complex background, embossed text (Deep Learning)</small>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="filter-controls">
+                    <label for="filterSelect">Filter Method:</label>
+                    <select id="filterSelect" class="select-input">
+                        <option value="combined">Combined (Recommended)</option>
+                        <option value="clahe">CLAHE</option>
+                        <option value="adaptive_threshold">Adaptive Threshold</option>
+                        <option value="morphological">Morphological</option>
+                        <option value="top_hat">Top Hat</option>
+                        <option value="gaussian_adaptive">Gaussian Adaptive</option>
+                        <option value="none">None (Simple preprocessing only)</option>
+                    </select>
+                    
+                    <label for="confidenceInput">Confidence Threshold:</label>
+                    <div class="slider-container">
+                        <input type="range" id="confidenceInput" min="0.1" max="0.9" step="0.1" value="0.3" class="slider">
+                        <span id="confidenceValue">0.3</span>
+                    </div>
+                </div>
+                <button id="processBtn" class="btn btn-success">
+                    🚀 Apply Filter & Extract Text
+                </button>
+            </div>
+
+            <!-- Results Section -->
+            <div class="card" id="resultsSection" style="display: none;">
+                <h2>📊 Results</h2>
+                
+                <!-- Filtered Image -->
+                <div class="image-container">
+                    <h3>Filtered Image</h3>
+                    <div class="image-wrapper">
+                        <img id="filteredImage" class="result-image" alt="Filtered image">
+                    </div>
+                    <p class="image-info" id="filterInfo"></p>
+                    <p class="image-info" id="ocrMethodInfo" style="color: #667eea; font-weight: 600;"></p>
+                </div>
+
+                <!-- Extracted Text -->
+                <div class="text-results">
+                    <h3>📝 Extracted Text</h3>
+                    <div class="text-stats" id="textStats"></div>
+                    
+                    <div class="text-tabs">
+                        <button class="tab-btn active" onclick="showTab('combined')">Combined</button>
+                        <button class="tab-btn" onclick="showTab('english')">English</button>
+                        <button class="tab-btn" onclick="showTab('persian')">Persian</button>
+                        <button class="tab-btn" onclick="showTab('details')">Details</button>
+                    </div>
+
+                    <div class="tab-content">
+                        <div id="combinedTab" class="tab-pane active">
+                            <div class="text-display" id="combinedText">No text extracted yet.</div>
+                        </div>
+                        <div id="englishTab" class="tab-pane">
+                            <div class="text-display" id="englishText">No English text found.</div>
+                        </div>
+                        <div id="persianTab" class="tab-pane">
+                            <div class="text-display" id="persianText">No Persian text found.</div>
+                        </div>
+                        <div id="detailsTab" class="tab-pane">
+                            <div class="detections-list" id="detectionsList"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Overlay -->
+            <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+                <div class="spinner"></div>
+                <p>Processing image...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
+
