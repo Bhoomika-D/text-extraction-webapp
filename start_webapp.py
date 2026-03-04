@@ -4,9 +4,8 @@ Startup script for the Text Extraction Web Application
 
 import os
 import sys
-import webbrowser
 from pathlib import Path
-import time
+
 
 def check_dependencies():
     """Check if required dependencies are installed"""
@@ -85,20 +84,14 @@ def main():
     print("\n" + "=" * 70)
     print("Starting Flask server...")
     print("=" * 70)
-    print("\n🌐 Server will start at: http://localhost:5000")
+    port = int(os.environ.get("PORT", 5000))
+    print(f"\n🌐 Server starting on port: {port}")
     print("📝 Press Ctrl+C to stop the server")
     print("\n⏳ Opening browser in 3 seconds...")
     print("=" * 70 + "\n")
     
     # Open browser after delay
-    def open_browser():
-        time.sleep(3)
-        webbrowser.open('http://localhost:5000')
     
-    import threading
-    browser_thread = threading.Thread(target=open_browser)
-    browser_thread.daemon = True
-    browser_thread.start()
     
     # Import and run app
     try:
