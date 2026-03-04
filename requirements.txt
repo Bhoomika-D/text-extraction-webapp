@@ -11,4 +11,10 @@ easyocr>=1.7.0
 pytesseract>=0.3.10
 python-bidi==0.4.2
 
+torch
+torchvision
+
+gunicorn
+
+
 
